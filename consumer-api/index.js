@@ -1,10 +1,35 @@
 const log = console.log;
 
-const express = require("express");
-const error_handler = require("./error_handler/error_handler");
+const http = require("http");
+const path = require("path");
 
-const consumer_api = express();
+const env = require("dotenv");
+env.config({ path: path.join("configs", "network.env") });
 
-consumer_api.use();
+const router = http.createServer((req, res) => {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const path = url.pathname;
+  const method = req.method;
 
-consumer_api.use(error_handler);
+  if (path === "/") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        data: " /",
+      })
+    );
+  }
+  if (path === "/x") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        data: " /x",
+      })
+    );
+  }
+});
+
+const IP = process.env.IP;
+const PORT = process.env.PORT;
+
+router.listen(PORT, IP);
