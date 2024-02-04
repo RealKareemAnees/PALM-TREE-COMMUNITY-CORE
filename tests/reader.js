@@ -9,7 +9,7 @@ const server = net.createServer((socket) => {
   let fileStream;
 
   socket.on("data", (data) => {
-    const fileDir = path.join(JSON.parse(data).filedir);
+    const fileDir = JSON.parse(data).file_dir;
 
     fs.open(fileDir, "r")
       .then((fileHandle) => {
