@@ -1,31 +1,27 @@
-const handle_home_page = require("./handle_home_page/handle_home_page");
-
-const log = console.log;
-
 const http = require("http");
 const path = require("path");
 
 const env = require("dotenv");
-env.config({ path: path.join("configs", "network.env") });
+env.config({ path: path.join(__dirname, "..", "configs", "network.env") });
 
-const router = http.createServer(async (req, res) => {
+const handle_read = require("./handle_read/handle_read");
+const handle_home_page = require("./handle_home_page/handle_home_page");
+
+const PORT = process.env.PORT || 3000;
+
+const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const PATH = url.pathname;
     const METHOD = req.method;
 
-    PATH === "/homepage" ? handle_home_page(req, res) : res.end("error 404");
+    PATH === "/homepage"
+      ? await handle_home_page(req, res)
+      : PATH === "/read" && METHOD == "POST"
+      ? await handle_read(req, res)
+      : res.end("error 404");
   } catch (error) {
-    res.end("server error", error);
+    res.end("internal server error! ['_']");
   }
 });
-
-const IP = process.env.IP;
-const PORT = process.env.PORT;
-
-router.listen(PORT, IP);
-router.on("listening", () => {
-  setTimeout(() => {
-    log("router listening on port:", PORT, ", socket:", IP);
-  }, 0);
-});
+server.listen(process.env.PORT);
