@@ -1,12 +1,10 @@
 const fs = require("fs/promises");
+const path = require("path");
 
-module.exports = async (filedir, socket) => {
+module.exports = async (file_dir, socket) => {
   try {
-    let file_stream;
-
-    const file_dir = path.join(filedir);
     const file_handle = await fs.open(file_dir, "r");
-    file_stream = file_handle.createReadStream();
+    const file_stream = file_handle.createReadStream();
 
     file_stream.on("data", (chunk) => {
       if (!socket.write(chunk)) {
@@ -18,53 +16,42 @@ module.exports = async (filedir, socket) => {
       file_stream.resume();
     });
 
-    // file_stream.on("end", async () => {
-    //   // Close the file and end the socket if it is still open
-    //   if (!socket.destroyed) {
-    //     try {
-    //       await file_handle.close();
-    //       socket.end();
-    //     } catch (err) {
-    //       console.error(`Error closing file: ${err.message}`);
-    //       socket.end();
-    //     }
-    //   }
-    // });
+    file_stream.on("end", async () => {
+      try {
+        await file_handle.close();
+        socket.end();
+      } catch (err) {
+        console.error(`Error closing file: ${err.message}`);
+        socket.end();
+      }
+    });
 
-    // file_stream.on("error", (err) => {
-    //   // Handle error, write the error to the socket, and end
-    //   socket.write(`Error: ${err.message}`);
-    //   socket.end();
-    // });
+    file_stream.on("error", (err) => {
+      socket.write(`Error: ${err.message}`);
+      socket.destroy();
+    });
 
-    // // Handle the close event on the socket
-    // socket.on("close", () => {
-    //   console.log("Socket closed");
+    socket.on("close", () => {
+      console.log("Socket closed");
+      if (!file_stream.closed) {
+        file_stream.close();
+      }
+    });
 
-    //   // Check if file_stream exists before attempting to close it
-    //   if (file_stream && !file_stream.closed) {
-    //     file_stream.close();
-    //   }
-    // });
+    socket.on("end", () => {
+      console.log("Connection to client closed");
+      if (!socket.destroyed && !file_stream.closed) {
+        file_stream.close();
+      }
+    });
 
-    // // Handle the end event on the socket
-    // socket.on("end", () => {
-    //   console.log("Connection to client closed");
-
-    //   // Check if the socket was destroyed (file transfer canceled)
-    //   if (!socket.destroyed && file_stream) {
-    //     file_stream.close();
-    //   }
-    // });
-
-    // // Handle socket errors
-    // socket.on("error", (err) => {
-    //   console.error(`Socket error: ${err.message}`);
-
-    //   // Check if file_stream exists before attempting to close it
-    //   if (file_stream && !file_stream.closed) {
-    //     file_stream.close();
-    //   }
-    // });
-  } catch (error) {}
+    socket.on("error", (err) => {
+      console.error(`Socket error: ${err.message}`);
+      if (!file_stream.closed) {
+        file_stream.close();
+      }
+    });
+  } catch (error) {
+    console.error(`Unexpected error: ${error.message}`);
+  }
 };
