@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start-consumer": "node ./consumer/consumer.js",
+    "start-reader": "node ./reader/reader.js",
+    "start-writer": "node ./writer/writer.js",
+    "start-all": "npm-run-all --parallel start-consumer start-reader start-writer",
     "dev": "nodemon index.js"
   },
   "repository": {

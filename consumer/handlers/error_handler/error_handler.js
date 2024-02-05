@@ -1,3 +1,4 @@
 module.exports = async (req, res, next, error) => {
-  next();
+  res.send(error);
+  console.error(error);
 };

@@ -1,4 +1,4 @@
-const readfile = require("./readfile");
+const read_file = require("./controllers/read_file");
 
 const log = console.log;
 const path = require("path");
@@ -6,27 +6,23 @@ const path = require("path");
 const env = require("dotenv");
 env.config({ path: path.join(__dirname, "..", "configs", "network.env") });
 
-const get_file_dist = (chunk) => {
-  const reqBody = JSON.parse(chunk);
-  const dist = reqBody.dist;
-  return dist;
-};
+const get_file_dist = require("./functions/get_file_dist");
 
 module.exports = async (req, res, next) => {
   try {
-    let dist;
-
-    req.on("data", (chunk) => {
+    let dist = "";
+    req.on("data", (body) => {
       if (!dist) {
-        dist = get_file_dist(chunk);
+        dist = get_file_dist(body);
       }
     });
 
     req.on("end", async () => {
       if (dist) {
-        await readfile(res, dist);
+        await read_file(res, dist);
       } else {
         res.status(400).send("Bad Request: Missing data");
+        console.log("dist is missing");
       }
     });
 

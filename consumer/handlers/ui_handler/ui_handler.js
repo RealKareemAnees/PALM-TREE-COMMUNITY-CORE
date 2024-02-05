@@ -24,7 +24,8 @@ class HtmlCarrier {
 
 HtmlCarrier.cache_html(); // Ensure that HTML is cached during startup
 
-module.exports = (req, res) => {
+module.exports = (req, res, next) => {
   res.writeHead(200, { "Content-Type": "text/html" });
   res.end(HtmlCarrier.get_html());
+  next();
 };
