@@ -1,28 +1,20 @@
 const readfile = require("./readfile");
 
-const log = console.log;
-const path = require("path");
-
-const env = require("dotenv");
-env.config({ path: path.join(__dirname, "..", "configs", "network.env") });
-
-const get_file_dist = (chunk) => {
-  const reqBody = JSON.parse(chunk);
-  const dist = reqBody.dist;
-  return dist;
-};
-
 module.exports = async (req, res, next) => {
   try {
     let dist;
 
     req.on("data", (chunk) => {
       if (!dist) {
-        dist = get_file_dist(chunk);
+        dist = chunk.toString(); // Adjust as needed based on your data format
       }
     });
 
     req.on("end", async () => {
+      if (!dist) {
+        dist = req.query.dist;
+      }
+
       if (dist) {
         await readfile(res, dist);
       } else {
@@ -30,8 +22,13 @@ module.exports = async (req, res, next) => {
       }
     });
 
+    req.on("close", () => {
+      // Handle the connection being closed prematurely
+      console.log("Connection closed by the client");
+    });
+
     req.on("error", (error) => {
-      log("Request error:", error);
+      console.error("Request error:", error);
       next(error);
     });
   } catch (error) {

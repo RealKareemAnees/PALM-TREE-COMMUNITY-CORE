@@ -5,75 +5,87 @@ const env = require("dotenv");
 
 env.config({ path: path.join(__dirname, "..", "configs", "network.env") });
 
-const server = net.createServer((socket) => {
-  let fileStream;
+const server = net.createServer(async (socket) => {
+  socket.writableHighWaterMark = 1460;
 
-  socket.on("data", (data) => {
-    const fileDir = path.join(JSON.parse(data).filedir);
+  try {
+    let file_stream;
 
-    fs.open(fileDir, "r")
-      .then((fileHandle) => {
-        fileStream = fileHandle.createReadStream();
+    socket.on("data", async (data) => {
+      const file_dir = path.join(JSON.parse(data).filedir);
 
-        fileStream.on("data", (chunk) => {
+      try {
+        const file_handle = await fs.open(file_dir, "r");
+        file_stream = file_handle.createReadStream();
+
+        file_stream.on("data", (chunk) => {
           if (!socket.write(chunk)) {
-            fileStream.pause();
+            file_stream.pause();
           }
         });
 
         socket.on("drain", () => {
-          fileStream.resume();
+          file_stream.resume();
         });
 
-        fileStream.on("end", () => {
+        file_stream.on("end", async () => {
           // Close the file and end the socket if it is still open
           if (!socket.destroyed) {
-            fileHandle
-              .close()
-              .then(() => {
-                socket.end();
-              })
-              .catch((err) => {
-                console.error(`Error closing file: ${err.message}`);
-                socket.end();
-              });
+            try {
+              await file_handle.close();
+              socket.end();
+            } catch (err) {
+              console.error(`Error closing file: ${err.message}`);
+              socket.end();
+            }
           }
         });
 
-        fileStream.on("error", (err) => {
+        file_stream.on("error", (err) => {
           // Handle error, write the error to the socket, and end
           socket.write(`Error: ${err.message}`);
           socket.end();
         });
-      })
-      .catch((error) => {
+
+        // Handle the close event on the socket
+        socket.on("close", () => {
+          console.log("Socket closed");
+
+          // Check if file_stream exists before attempting to close it
+          if (file_stream && !file_stream.closed) {
+            file_stream.close();
+          }
+        });
+      } catch (error) {
         console.error("Error in server:", error);
         // Handle error, write the error to the socket, and end
         socket.write(`Error: ${error.message}`);
         socket.end();
-      });
-  });
+      }
+    });
 
-  // Handle the end event on the socket
-  socket.on("end", () => {
-    console.log("Connection to client closed");
-  });
+    // Handle the end event on the socket
+    socket.on("end", () => {
+      console.log("Connection to client closed");
 
-  // Handle the close event on the socket
-  socket.on("close", () => {
-    console.log("Socket closed");
+      // Check if the socket was destroyed (file transfer canceled)
+      if (!socket.destroyed && file_stream) {
+        file_stream.close();
+      }
+    });
 
-    if (fileStream && !fileStream.closed) {
-      fileStream.close().catch((err) => {
-        console.error(`Error closing file stream: ${err.message}`);
-      });
-    }
-  });
+    // Handle socket errors
+    socket.on("error", (err) => {
+      console.error(`Socket error: ${err.message}`);
 
-  // Handle socket errors
-  socket.on("error", (err) => {
-    console.error(`Socket error: ${err.message}`);
-  });
+      // Check if file_stream exists before attempting to close it
+      if (file_stream && !file_stream.closed) {
+        file_stream.close();
+      }
+    });
+  } catch (error) {
+    console.error("Error in server:", error);
+  }
 });
 
 // Handle server errors
@@ -85,5 +97,5 @@ const PORT = process.env.READER_PORT;
 const HOST = process.env.IP;
 
 server.listen(PORT, HOST, () => {
-  console.log(`Server listening on ${HOST}:${PORT}`);
+  console.log(`reader listening on ${HOST}:${PORT}`);
 });
