@@ -5,10 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-consumer": "node ./consumer/consumer.js",
-    "start-reader": "node ./reader/reader.js",
-    "start-writer": "node ./writer/writer.js",
-    "start-all": "npm-run-all --parallel start-consumer start-reader start-writer",
+    "start-consumer": "node ./src/consumer/consumer.js",
+    "start-reader": "node ./src/reader/reader.js",
+    "start-writer": "node ./src/writer/writer.js",
+    "start": "npm-run-all --parallel start-consumer start-reader start-writer",
+    "watch": "nodemon ./src/consumer/consumer.js ./src/reader/reader.js ./src/writer/writer.js",
+    "build": "tsc --build",
+    "watch-build": "tsc -w",
+    "watch-and-build": "npm run watch-build && npm run watch",
     "dev": "nodemon index.js"
   },
   "repository": {
@@ -22,10 +26,15 @@
   },
   "homepage": "https://github.com/RealKareemAnees/PALM-TREE-COMMUNITY-CORE#readme",
   "dependencies": {
-    "async-express-wrapper": "^1.0.0",
     "dotenv": "^16.4.1",
-    "express": "^4.18.2",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.17",
     "jest": "^29.7.0",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

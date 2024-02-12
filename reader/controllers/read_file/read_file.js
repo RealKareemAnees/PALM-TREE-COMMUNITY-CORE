@@ -1,5 +1,4 @@
 const fs = require("fs/promises");
-const path = require("path");
 
 module.exports = async (file_dir, socket) => {
   try {
