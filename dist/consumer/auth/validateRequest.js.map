@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/consumer/auth/validateRequest.ts"],
+  "sourcesContent": ["import { Request, Response, NextFunction } from \"express\";\n/**\n *\n * @param req\n * @param res\n * @param next\n */\nfunction validateRequest(req: Request, res: Response, next: NextFunction): any {\n  next();\n}\n\nexport { validateRequest };\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAOA,SAAS,gBAAgB,KAAc,KAAe,MAAyB;AAC7E,OAAK;AACP;",
+  "names": []
+}

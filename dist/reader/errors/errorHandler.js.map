@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/reader/errors/errorHandler.ts"],
+  "sourcesContent": ["import * as tcp from \"net\";\n\nfunction errorHandler(socket: tcp.Socket, error: Error) {\n  socket.end();\n  console.log(error);\n}\n\nexport { errorHandler };\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,SAAS,aAAa,QAAoB,OAAc;AACtD,SAAO,IAAI;AACX,UAAQ,IAAI,KAAK;AACnB;",
+  "names": []
+}
