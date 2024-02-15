@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/consumer/router/readRouter.ts"],
-  "sourcesContent": ["import { Request, Response, NextFunction, Router } from \"express\";\n\nimport { handleRead } from \"../handlers/handleRead/handleRead\";\n\nconst readRouter = Router();\n\nreadRouter.get(\n  \"/read-file/:filepath\",\n  async (req: Request, res: Response, next: NextFunction): Promise<void> => {\n    try {\n      await handleRead(req, res);\n      next();\n    } catch (error) {\n      next(error);\n    }\n  }\n);\n\nexport { readRouter };\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,qBAAwD;AAExD,wBAA2B;AAE3B,MAAM,iBAAa,uBAAO;AAE1B,WAAW;AAAA,EACT;AAAA,EACA,OAAO,KAAc,KAAe,SAAsC;AACxE,QAAI;AACF,gBAAM,8BAAW,KAAK,GAAG;AACzB,WAAK;AAAA,IACP,SAAS,OAAO;AACd,WAAK,KAAK;AAAA,IACZ;AAAA,EACF;AACF;",
-  "names": []
-}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../handlers/getApp/getAppHandler.ts"],
+  "sourcesContent": ["import { Request, Response, NextFunction, Router } from \"express\";\n\n/**\n *\n * @param {Request} req request object\n * @param {Response} res response object\n * @description For now it just sends empty html\n */\nfunction getAppHandler(req: Request, res: Response) {\n  res.send(`<!DOCTYPE html>\n    <html lang=\"en\">\n      <head>\n        <meta charset=\"UTF-8\" />\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n        <title>homepage</title>\n      </head>\n      <body>\n        <h1>PALM TREE</h1>\n      </body>\n    </html>\n    `);\n}\n\nexport { getAppHandler };\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAQA,SAAS,cAAc,KAAc,KAAe;AAClD,MAAI,KAAK;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,KAWN;AACL;",
+  "names": []
+}

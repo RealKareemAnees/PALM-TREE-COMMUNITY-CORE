@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../router/functions/parseData.ts"],
+  "sourcesContent": ["interface ParsedData {\n  read_type: string;\n  file_path: string;\n}\n\n/**\n *\n * @param data\n * @returns { read_type: parsedData.read_type, file_path: parsedData.file_path }\n */\nfunction parseData(data: any): ParsedData {\n  const parsedData: ParsedData = JSON.parse(data);\n  return { read_type: parsedData.read_type, file_path: parsedData.file_path };\n}\n\nexport { parseData };\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAUA,SAAS,UAAU,MAAuB;AACxC,QAAM,aAAyB,KAAK,MAAM,IAAI;AAC9C,SAAO,EAAE,WAAW,WAAW,WAAW,WAAW,WAAW,UAAU;AAC5E;",
+  "names": []
+}

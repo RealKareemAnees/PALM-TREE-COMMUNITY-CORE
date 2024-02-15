@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../router/getAppRouter.ts"],
+  "sourcesContent": ["import { Request, Response, NextFunction, Router } from \"express\";\n\nimport { getAppHandler } from \"../handlers/getApp/getAppHandler\";\n\nconst getApp = Router();\n\ngetApp.get(\"/\", (req: Request, res: Response, next: NextFunction) => {\n  getAppHandler(req, res);\n});\n\nexport { getApp };\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,qBAAwD;AAExD,2BAA8B;AAE9B,MAAM,aAAS,uBAAO;AAEtB,OAAO,IAAI,KAAK,CAAC,KAAc,KAAe,SAAuB;AACnE,0CAAc,KAAK,GAAG;AACxB,CAAC;",
+  "names": []
+}
