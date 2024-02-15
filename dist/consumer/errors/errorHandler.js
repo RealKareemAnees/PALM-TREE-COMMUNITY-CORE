@@ -30,3 +30,4 @@ function errorHandler(error, req, res, next) {
 0 && (module.exports = {
   errorHandler
 });
+//# sourceMappingURL=errorHandler.js.map

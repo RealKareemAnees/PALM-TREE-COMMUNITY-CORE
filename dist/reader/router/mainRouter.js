@@ -37,3 +37,4 @@ async function router(socket, data) {
 0 && (module.exports = {
   router
 });
+//# sourceMappingURL=mainRouter.js.map

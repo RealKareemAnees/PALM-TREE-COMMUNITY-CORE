@@ -38,3 +38,4 @@ function getAppHandler(req, res) {
 0 && (module.exports = {
   getAppHandler
 });
+//# sourceMappingURL=getAppHandler.js.map

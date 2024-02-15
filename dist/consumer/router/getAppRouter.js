@@ -21,7 +21,7 @@ __export(getAppRouter_exports, {
 });
 module.exports = __toCommonJS(getAppRouter_exports);
 var import_express = require("express");
-var import_getAppHandler = require("../handlers/getApp/getAppHandler.ts");
+var import_getAppHandler = require("../handlers/getApp/getAppHandler");
 const getApp = (0, import_express.Router)();
 getApp.get("/", (req, res, next) => {
   (0, import_getAppHandler.getAppHandler)(req, res);
@@ -30,3 +30,4 @@ getApp.get("/", (req, res, next) => {
 0 && (module.exports = {
   getApp
 });
+//# sourceMappingURL=getAppRouter.js.map

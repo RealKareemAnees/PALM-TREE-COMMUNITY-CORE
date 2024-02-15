@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../../../src/consumer/errors/errorHandler.ts"],
   "sourcesContent": ["import { Request, Response, NextFunction } from \"express\";\n\nimport \"colors\";\n\n/**\n * @param req Request object\n * @param res Response object\n * @param next Next function\n * @param error Error object\n * @description This error handler handles all errors in the consumer according to the passed error object based on HTTP standards.\n * @author Kareemun: https://github.com/RealKareemAnees\n */\nfunction errorHandler(\n  error: any,\n  req: Request,\n  res: Response,\n  next: NextFunction\n): any {\n  console.log(\"AN ERROR OCCURRED\".red);\n  console.error(error);\n  res.status(500).send({ error: \"Internal Server Error\" });\n}\nexport { errorHandler };\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,oBAAO;AAUP,SAAS,aACP,OACA,KACA,KACA,MACK;AACL,UAAQ,IAAI,oBAAoB,GAAG;AACnC,UAAQ,MAAM,KAAK;AACnB,MAAI,OAAO,GAAG,EAAE,KAAK,EAAE,OAAO,wBAAwB,CAAC;AACzD;",
+  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,oBAAO;AAUP,SAAS,aACP,OACA,KACA,KACA,MACK;AACL,UAAQ,IAAI,oBAAoB,GAAG;AACnC,UAAQ,MAAM,KAAK;AACnB,MAAI,OAAO,GAAG,EAAE,KAAK,EAAE,OAAO,wBAAwB,CAAC;AACzD;",
   "names": []
 }

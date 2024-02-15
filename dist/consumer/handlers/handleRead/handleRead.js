@@ -30,8 +30,8 @@ __export(handleRead_exports, {
   handleRead: () => handleRead
 });
 module.exports = __toCommonJS(handleRead_exports);
-var tcp = __toESM(require("net"), 1);
-var import_connectToReader = require("./functions/connectToReader.ts");
+var tcp = __toESM(require("net"));
+var import_connectToReader = require("./functions/connectToReader");
 async function handleRead(req, res) {
   const filepath = req.params.filepath;
   const filename = filepath.substring(filepath.lastIndexOf("/") + 1);
@@ -73,3 +73,4 @@ async function handleRead(req, res) {
 0 && (module.exports = {
   handleRead
 });
+//# sourceMappingURL=handleRead.js.map

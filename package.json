@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
+    "watch-consumer": "nodemon ./dist/consumer/consumer.js",
+    "watch-reader": "nodemon ./dist/reader/reader.js",
     "build": "etsc"
   },
   "repository": {

@@ -21,15 +21,15 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var import_colors = require("colors");
-var path = __toESM(require("path"), 1);
-var env = __toESM(require("dotenv"), 1);
-var import_express = __toESM(require("express"), 1);
+var path = __toESM(require("path"));
+var env = __toESM(require("dotenv"));
+var import_express = __toESM(require("express"));
 var import_errorHandler = require("./errors/errorHandler");
 var import_validateRequest = require("./auth/validateRequest");
 var import_getAppRouter = require("./router/getAppRouter");
 var import_readRouter = require("./router/readRouter");
 const log = console.log;
-log("consumer has started".green);
+log("consumer has started".rainbow);
 env.config({
   path: path.join(__dirname, "..", "..", "configs", "network.env")
 });
@@ -39,3 +39,11 @@ consumer.use(import_validateRequest.validateRequest);
 consumer.get("/palm-tree", import_getAppRouter.getApp);
 consumer.use("/read", import_readRouter.readRouter);
 consumer.use(import_errorHandler.errorHandler);
+consumer.listen(process.env.PORT, () => {
+  log(
+    "consumer is listening on port:",
+    process.env.PORT,
+    "on all hosts".rainbow
+  );
+});
+//# sourceMappingURL=consumer.js.map

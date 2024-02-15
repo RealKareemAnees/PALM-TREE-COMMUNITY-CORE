@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, Router } from "express";
 
-import { handleRead } from "../handlers/handleRead/handleRead.ts";
+import { handleRead } from "../handlers/handleRead/handleRead";
 
 const readRouter = Router();
 

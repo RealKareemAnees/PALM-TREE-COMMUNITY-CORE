@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, Router } from "express";
 
-import { getAppHandler } from "../handlers/getApp/getAppHandler.ts";
+import { getAppHandler } from "../handlers/getApp/getAppHandler";
 
 const getApp = Router();
 

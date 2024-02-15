@@ -28,3 +28,4 @@ function errorHandler(socket, error) {
 0 && (module.exports = {
   errorHandler
 });
+//# sourceMappingURL=errorHandler.js.map

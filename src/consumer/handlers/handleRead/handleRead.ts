@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as tcp from "net";
-import { connectToReader } from "./functions/connectToReader.ts";
+import { connectToReader } from "./functions/connectToReader";
 
 /**
  *

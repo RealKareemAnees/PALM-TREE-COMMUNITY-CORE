@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../../../src/reader/router/mainRouter.ts"],
   "sourcesContent": ["import * as tcp from \"net\";\nimport { join } from \"path\";\n\nimport { parseData } from \"./functions/parseData\";\nimport { streamFile } from \"../controllers/streamFile\";\n\n/**\n * @param {tcp.Socket} socket\n * @param {any} data\n * @description this parses requests and routes them, just pass the data\n * @author kareemun (you know my github)\n */\nasync function router(socket: tcp.Socket, data: any): Promise<void> {\n  try {\n    const order = parseData(data);\n\n    if (order.read_type === \"single_file\") {\n      const filePath = join(order.file_path);\n      await streamFile(socket, filePath);\n    }\n  } catch (error) {}\n}\n\nexport { router };\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AACA,kBAAqB;AAErB,uBAA0B;AAC1B,wBAA2B;AAQ3B,eAAe,OAAO,QAAoB,MAA0B;AAClE,MAAI;AACF,UAAM,YAAQ,4BAAU,IAAI;AAE5B,QAAI,MAAM,cAAc,eAAe;AACrC,YAAM,eAAW,kBAAK,MAAM,SAAS;AACrC,gBAAM,8BAAW,QAAQ,QAAQ;AAAA,IACnC;AAAA,EACF,SAAS,OAAO;AAAA,EAAC;AACnB;",
+  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AACA,kBAAqB;AAErB,uBAA0B;AAC1B,wBAA2B;AAQ3B,eAAe,OAAO,QAAoB,MAA0B;AAClE,MAAI;AACF,UAAM,YAAQ,4BAAU,IAAI;AAE5B,QAAI,MAAM,cAAc,eAAe;AACrC,YAAM,eAAW,kBAAK,MAAM,SAAS;AACrC,gBAAM,8BAAW,QAAQ,QAAQ;AAAA,IACnC;AAAA,EACF,SAAS,OAAO;AAAA,EAAC;AACnB;",
   "names": []
 }

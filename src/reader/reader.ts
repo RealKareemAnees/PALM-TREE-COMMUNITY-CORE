@@ -13,8 +13,8 @@ env.config({
 import * as tcp from "net";
 const server = tcp.createServer();
 
-import { router } from "./router/mainRouter.ts";
-import { errorHandler } from "./errors/errorHandler.ts";
+import { router } from "./router/mainRouter";
+import { errorHandler } from "./errors/errorHandler";
 
 server.on("connection", async (socket) => {
   try {
@@ -30,5 +30,5 @@ const PORT = process.env.READER_PORT;
 const HOST: number = parseInt(process.env.IP || "127.0.0.1", 10); // Default value for IP address
 
 server.listen(PORT, HOST, () => {
-  console.log(`reader listening on ${HOST}:${PORT}`.blue);
+  console.log(`reader listening on ${HOST}:${PORT}`.rainbow);
 });

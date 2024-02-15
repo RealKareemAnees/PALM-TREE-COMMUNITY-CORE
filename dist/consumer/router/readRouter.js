@@ -21,7 +21,7 @@ __export(readRouter_exports, {
 });
 module.exports = __toCommonJS(readRouter_exports);
 var import_express = require("express");
-var import_handleRead = require("../handlers/handleRead/handleRead.ts");
+var import_handleRead = require("../handlers/handleRead/handleRead");
 const readRouter = (0, import_express.Router)();
 readRouter.get(
   "/read-file/:filepath",
@@ -38,3 +38,4 @@ readRouter.get(
 0 && (module.exports = {
   readRouter
 });
+//# sourceMappingURL=readRouter.js.map

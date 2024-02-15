@@ -21,11 +21,11 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var import_colors = require("colors");
-var path = __toESM(require("path"), 1);
-var env = __toESM(require("dotenv"), 1);
-var tcp = __toESM(require("net"), 1);
-var import_mainRouter = require("./router/mainRouter.ts");
-var import_errorHandler = require("./errors/errorHandler.ts");
+var path = __toESM(require("path"));
+var env = __toESM(require("dotenv"));
+var tcp = __toESM(require("net"));
+var import_mainRouter = require("./router/mainRouter");
+var import_errorHandler = require("./errors/errorHandler");
 const log = console.log;
 log("reader has started".green);
 env.config({
@@ -44,5 +44,6 @@ server.on("connection", async (socket) => {
 const PORT = process.env.READER_PORT;
 const HOST = parseInt(process.env.IP || "127.0.0.1", 10);
 server.listen(PORT, HOST, () => {
-  console.log(`reader listening on ${HOST}:${PORT}`.blue);
+  console.log(`reader listening on ${HOST}:${PORT}`.rainbow);
 });
+//# sourceMappingURL=reader.js.map

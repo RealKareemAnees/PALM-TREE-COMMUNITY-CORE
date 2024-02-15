@@ -1,7 +1,7 @@
 import "colors";
 
 const log = console.log;
-log("consumer has started".green);
+log("consumer has started".rainbow);
 
 import * as path from "path";
 import * as env from "dotenv";
@@ -12,10 +12,10 @@ env.config({
 
 import express from "express";
 
-import { errorHandler } from "./errors/errorHandler.ts";
-import { validateRequest } from "./auth/validateRequest.ts";
-import { getApp } from "./router/getAppRouter.ts";
-import { readRouter } from "./router/readRouter.ts";
+import { errorHandler } from "./errors/errorHandler";
+import { validateRequest } from "./auth/validateRequest";
+import { getApp } from "./router/getAppRouter";
+import { readRouter } from "./router/readRouter";
 
 const consumer = express();
 
@@ -26,3 +26,11 @@ consumer.get("/palm-tree", getApp);
 consumer.use("/read", readRouter);
 
 consumer.use(errorHandler);
+
+consumer.listen(process.env.PORT, () => {
+  log(
+    "consumer is listening on port:",
+    process.env.PORT,
+    "on all hosts".rainbow
+  );
+});

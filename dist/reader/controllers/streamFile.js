@@ -69,3 +69,4 @@ async function streamFile(socket, path) {
 0 && (module.exports = {
   streamFile
 });
+//# sourceMappingURL=streamFile.js.map

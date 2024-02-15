@@ -36,3 +36,4 @@ async function connectToReader(reader, filepath) {
 0 && (module.exports = {
   connectToReader
 });
+//# sourceMappingURL=connectToReader.js.map
