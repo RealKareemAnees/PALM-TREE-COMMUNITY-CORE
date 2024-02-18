@@ -6,6 +6,7 @@ log("reader has started".green);
 import * as path from "path";
 import * as env from "dotenv";
 
+import { streamFile } from "./controllers/streamFile";
 env.config({
   path: path.join(__dirname, "..", "..", "configs", "network.env"),
 });
@@ -30,5 +31,11 @@ const PORT = process.env.READER_PORT;
 const HOST = process.env.IP;
 //@ts-ignore
 server.listen(PORT, HOST, () => {
-  console.log("reader listening on ", HOST.rainbow, ":", PORT.rainbow);
+  console.log(
+    "reader listening on ",
+    process.env.IP,
+    ":",
+    process.env.READER_PORT,
+    "".rainbow
+  );
 });

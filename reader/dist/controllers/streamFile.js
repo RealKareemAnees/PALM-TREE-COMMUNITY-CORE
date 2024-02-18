@@ -1,6 +1,8 @@
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -14,17 +16,27 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var streamFile_exports = {};
 __export(streamFile_exports, {
   streamFile: () => streamFile
 });
 module.exports = __toCommonJS(streamFile_exports);
-var import_promises = require("fs/promises");
+var fs = __toESM(require("fs"));
+var import_path = require("path");
+var import_errorHandler = require("../errors/errorHandler");
+const log = console.log;
 async function streamFile(socket, path) {
   try {
-    const fileHandle = await (0, import_promises.open)(path, "r");
-    const fileStream = fileHandle.createReadStream();
+    const fileStream = fs.createReadStream((0, import_path.join)(path));
     fileStream.on("data", (chunk) => {
       if (!socket.write(chunk)) {
         fileStream.pause();
@@ -33,36 +45,25 @@ async function streamFile(socket, path) {
     socket.on("drain", () => {
       fileStream.resume();
     });
-    fileStream.on("end", async () => {
-      try {
-        await fileHandle.close();
-        socket.end();
-      } catch (error) {
-        socket.end();
-        throw new Error(error);
-      }
+    fileStream.on("end", () => {
+      log("filestream has ent ,ending socket");
+      socket.end();
+      log("socket ent");
     });
-    socket.on("close", () => {
-      console.log("Socket closed");
-      if (!fileStream.closed) {
-        fileStream.close();
-      }
-    });
-    socket.on("end", () => {
-      console.log("Connection to client closed");
-      if (!socket.destroyed && !fileStream.closed) {
-        fileStream.close();
-      }
+    fileStream.on("error", (error) => {
+      log("error from filestream ,ending socket");
+      socket.end();
+      log("socket ent");
+      (0, import_errorHandler.errorHandler)(socket, error);
     });
     socket.on("error", (error) => {
-      if (!fileStream.closed) {
-        fileStream.close();
-      }
-      const stringifiedErrorBecauseThisFuckenTypeScriptJustSucks = error.toString();
-      throw new Error(stringifiedErrorBecauseThisFuckenTypeScriptJustSucks);
+      log("error from socket, closing filestream");
+      fileStream.close();
+      log("filestream has been closed");
+      (0, import_errorHandler.errorHandler)(socket, error);
     });
   } catch (error) {
-    throw new Error(error);
+    (0, import_errorHandler.errorHandler)(socket, error);
   }
 }
 // Annotate the CommonJS export names for ESM import in node:

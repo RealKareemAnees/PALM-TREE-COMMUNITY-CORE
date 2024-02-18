@@ -4,6 +4,10 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -20,30 +24,35 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var import_colors = require("colors");
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var getFileInfo_exports = {};
+__export(getFileInfo_exports, {
+  getFileInfo: () => getFileInfo
+});
+module.exports = __toCommonJS(getFileInfo_exports);
+var fs = __toESM(require("fs/promises"));
 var path = __toESM(require("path"));
-var env = __toESM(require("dotenv"));
-var import_express = __toESM(require("express"));
-var import_errorHandler = require("./errors/errorHandler");
-var import_validateRequest = require("./auth/validateRequest");
-var import_getAppRouter = require("./router/getAppRouter");
-var import_readRouter = require("./router/readRouter");
-const log = console.log;
-log("consumer has started".green);
-env.config({
-  path: path.join(__dirname, "..", "..", "configs", "network.env")
+async function getFileInfo(filepath) {
+  try {
+    const normalizedPath = path.normalize(filepath);
+    const stats = await fs.stat(normalizedPath);
+    console.log(
+      `fileinfo: 
+            basename: ${path.basename(normalizedPath)},
+            size: ${stats.size},
+            path: ${normalizedPath}`.yellow
+    );
+    return {
+      filename: path.basename(normalizedPath),
+      size: stats.size,
+      normalizedFilePath: normalizedPath
+    };
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  getFileInfo
 });
-const consumer = (0, import_express.default)();
-consumer.use(import_express.default.json());
-consumer.use(import_validateRequest.validateRequest);
-consumer.use("/read", import_readRouter.readRouter);
-consumer.use("/palm-tree", import_getAppRouter.getApp);
-consumer.use(import_errorHandler.errorHandler);
-consumer.listen(process.env.PORT, () => {
-  log(
-    "consumer is listening on port:",
-    process.env.PORT.rainbow,
-    "on all hosts".rainbow
-  );
-});
-//# sourceMappingURL=consumer.js.map
+//# sourceMappingURL=getFileInfo.js.map

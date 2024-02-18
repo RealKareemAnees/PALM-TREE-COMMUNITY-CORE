@@ -22,15 +22,15 @@ const consumer = express();
 consumer.use(express.json());
 consumer.use(validateRequest);
 
-consumer.get("/palm-tree", getApp);
 consumer.use("/read", readRouter);
+consumer.use("/palm-tree", getApp);
 
 consumer.use(errorHandler);
 
 consumer.listen(process.env.PORT, () => {
   log(
     "consumer is listening on port:",
-    process.env.PORT,
+    process.env.PORT.rainbow,
     "on all hosts".rainbow
   );
 });

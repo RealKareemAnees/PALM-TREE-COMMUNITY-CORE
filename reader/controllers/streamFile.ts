@@ -1,60 +1,53 @@
 import * as tcp from "net";
-import { open } from "fs/promises";
+import * as fs from "fs";
+import { join } from "path";
+import { errorHandler } from "../errors/errorHandler";
+
+const log = console.log;
 
 /**
- *
- * @param {tcp.Socket} socket
- * @param {string} path
- * @description no description, just read the fucken STRONGLY TYPED TS CODE
- * @author zeft
+ * Streams a file over a TCP socket.
+ * @param {tcp.Socket} socket The TCP socket to stream the file to.
+ * @param {string} path The path to the file to stream.
  */
 async function streamFile(socket: tcp.Socket, path: string) {
   try {
-    const fileHandle = await open(path, "r");
-    const fileStream = fileHandle.createReadStream();
+    const fileStream = fs.createReadStream(join(path));
 
     fileStream.on("data", (chunk) => {
       if (!socket.write(chunk)) {
         fileStream.pause();
       }
     });
+
     socket.on("drain", () => {
       fileStream.resume();
     });
 
-    fileStream.on("end", async () => {
-      try {
-        await fileHandle.close();
-        socket.end();
-      } catch (error) {
-        socket.end();
-        throw new Error(error);
-      }
+    fileStream.on("end", () => {
+      log("filestream has ent ,ending socket");
+      socket.end();
+      log("socket ent");
     });
 
-    socket.on("close", () => {
-      console.log("Socket closed");
-      if (!fileStream.closed) {
-        fileStream.close();
-      }
+    fileStream.on("error", (error) => {
+      log("error from filestream ,ending socket");
+
+      socket.end();
+
+      log("socket ent");
+
+      errorHandler(socket, error);
     });
 
-    socket.on("end", () => {
-      console.log("Connection to client closed");
-      if (!socket.destroyed && !fileStream.closed) {
-        fileStream.close();
-      }
-    });
     socket.on("error", (error) => {
-      if (!fileStream.closed) {
-        fileStream.close();
-      }
-      const stringifiedErrorBecauseThisFuckenTypeScriptJustSucks =
-        error.toString();
-      throw new Error(stringifiedErrorBecauseThisFuckenTypeScriptJustSucks);
+      log("error from socket, closing filestream");
+      fileStream.close();
+      log("filestream has been closed");
+      errorHandler(socket, error);
     });
   } catch (error) {
-    throw new Error(error);
+    errorHandler(socket, error);
   }
 }
 

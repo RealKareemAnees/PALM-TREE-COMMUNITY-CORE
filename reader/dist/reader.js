@@ -29,7 +29,7 @@ var import_errorHandler = require("./errors/errorHandler");
 const log = console.log;
 log("reader has started".green);
 env.config({
-  path: path.join(__dirname, "..", "..", "configs", "network.env")
+  path: path.join(__dirname, "..", "..", "..", "configs", "network.env")
 });
 const server = tcp.createServer();
 server.on("connection", async (socket) => {
@@ -44,6 +44,12 @@ server.on("connection", async (socket) => {
 const PORT = process.env.READER_PORT;
 const HOST = process.env.IP;
 server.listen(PORT, HOST, () => {
-  console.log("reader listening on ", HOST.rainbow, ":", PORT.rainbow);
+  console.log(
+    "reader listening on ",
+    process.env.IP,
+    ":",
+    process.env.READER_PORT,
+    "".rainbow
+  );
 });
 //# sourceMappingURL=reader.js.map

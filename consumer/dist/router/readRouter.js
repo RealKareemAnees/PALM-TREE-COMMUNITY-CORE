@@ -21,19 +21,10 @@ __export(readRouter_exports, {
 });
 module.exports = __toCommonJS(readRouter_exports);
 var import_express = require("express");
+var import_colors = require("colors");
 var import_handleRead = require("../handlers/handleRead/handleRead");
 const readRouter = (0, import_express.Router)();
-readRouter.get(
-  "/read-file/:filepath",
-  async (req, res, next) => {
-    try {
-      await (0, import_handleRead.handleRead)(req, res);
-      next();
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+readRouter.get("/read-file", import_handleRead.handleRead);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   readRouter

@@ -32,42 +32,20 @@ __export(handleRead_exports, {
 module.exports = __toCommonJS(handleRead_exports);
 var tcp = __toESM(require("net"));
 var import_connectToReader = require("./functions/connectToReader");
-async function handleRead(req, res) {
-  const filepath = req.params.filepath;
-  const filename = filepath.substring(filepath.lastIndexOf("/") + 1);
-  const reader = new tcp.Socket();
-  await (0, import_connectToReader.connectToReader)(reader, filepath);
-  reader.on("data", async (data) => {
-    if (!res.write(data)) {
-      reader.pause();
-    }
-  });
-  let totalBytesSent = 0;
-  res.setHeader("Content-Disposition", `attachment; filename=${filename}`);
-  res.on("drain", () => {
-    reader.resume();
-  });
-  reader.on("end", () => {
-    console.log("Connection to server closed");
-    res.end();
-  });
-  res.on("close", () => {
-    console.log("Response closed by the client");
-    reader.destroy();
-  });
-  reader.on("close", () => {
-    console.log("Socket closed");
-    res.end();
-  });
-  reader.on("timeout", () => {
-    console.log("Socket timed out");
-    reader.destroy();
-    res.end();
-  });
-  reader.on("error", (error) => {
-    console.error("Error from the reader:", error);
-    throw new Error();
-  });
+var import_getFileInfo = require("./functions/getFileInfo");
+var import_getFileStream = require("./functions/getFileStream");
+async function handleRead(req, res, next) {
+  try {
+    const filepath = req.query.filepath;
+    const { filename, size, normalizedFilePath } = await (0, import_getFileInfo.getFileInfo)(filepath);
+    const socket = new tcp.Socket();
+    await (0, import_connectToReader.connectToReader)(socket, normalizedFilePath);
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader("Content-Length", size.toString());
+    await (0, import_getFileStream.getFileStream)(socket, res, next);
+  } catch (error) {
+    next(error);
+  }
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

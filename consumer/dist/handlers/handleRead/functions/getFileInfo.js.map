@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../handlers/handleRead/functions/getFileInfo.ts"],
+  "sourcesContent": ["import * as fs from \"fs/promises\";\nimport * as path from \"path\";\n\nasync function getFileInfo(filepath: string) {\n  try {\n    const normalizedPath = path.normalize(filepath);\n\n    const stats = await fs.stat(normalizedPath);\n\n    console.log(\n      `fileinfo: \n            basename: ${path.basename(normalizedPath)},\n            size: ${stats.size},\n            path: ${normalizedPath}`.yellow\n    );\n\n    return {\n      filename: path.basename(normalizedPath),\n      size: stats.size,\n      normalizedFilePath: normalizedPath,\n    };\n  } catch (error) {\n    throw new Error(error);\n  }\n}\n\nexport { getFileInfo };\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,SAAoB;AACpB,WAAsB;AAEtB,eAAe,YAAY,UAAkB;AAC3C,MAAI;AACF,UAAM,iBAAiB,KAAK,UAAU,QAAQ;AAE9C,UAAM,QAAQ,MAAM,GAAG,KAAK,cAAc;AAE1C,YAAQ;AAAA,MACN;AAAA,wBACkB,KAAK,SAAS,cAAc,CAAC;AAAA,oBACjC,MAAM,IAAI;AAAA,oBACV,cAAc,GAAG;AAAA,IACjC;AAEA,WAAO;AAAA,MACL,UAAU,KAAK,SAAS,cAAc;AAAA,MACtC,MAAM,MAAM;AAAA,MACZ,oBAAoB;AAAA,IACtB;AAAA,EACF,SAAS,OAAO;AACd,UAAM,IAAI,MAAM,KAAK;AAAA,EACvB;AACF;",
+  "names": []
+}

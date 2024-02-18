@@ -1,19 +1,9 @@
-import { Request, Response, NextFunction, Router } from "express";
-
+import { Router } from "express";
+import "colors";
 import { handleRead } from "../handlers/handleRead/handleRead";
 
 const readRouter = Router();
 
-readRouter.get(
-  "/read-file/:filepath",
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      await handleRead(req, res);
-      next();
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+readRouter.get("/read-file", handleRead);
 
 export { readRouter };

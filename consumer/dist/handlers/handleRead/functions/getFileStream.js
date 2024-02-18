@@ -15,31 +15,40 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var mainRouter_exports = {};
-__export(mainRouter_exports, {
-  router: () => router
+var getFileStream_exports = {};
+__export(getFileStream_exports, {
+  getFileStream: () => getFileStream
 });
-module.exports = __toCommonJS(mainRouter_exports);
-var import_path = require("path");
-var import_parseData = require("./functions/parseData");
-var import_streamFile = require("../controllers/streamFile");
-var import_errorHandler = require("../errors/errorHandler");
-const log = console.log;
-async function router(socket, data) {
-  console.log("got a message: ", data.toString());
-  try {
-    const order = (0, import_parseData.parseData)(data);
-    if (order.read_type === "single_file") {
-      const filePath = (0, import_path.join)(order.file_path);
-      log("starting filestream");
-      await (0, import_streamFile.streamFile)(socket, filePath);
+module.exports = __toCommonJS(getFileStream_exports);
+async function getFileStream(socket, res, next) {
+  socket.on("data", (data) => {
+    if (!res.write(data)) {
+      socket.pause();
     }
-  } catch (error) {
-    (0, import_errorHandler.errorHandler)(socket, error);
-  }
+  });
+  res.on("drain", () => {
+    socket.resume();
+  });
+  socket.on("end", () => {
+    console.log("socket ent from reader");
+    res.end();
+  });
+  socket.on("error", (error) => {
+    console.error("Socket error:", error);
+    next(error);
+  });
+  res.on("error", (error) => {
+    socket.destroy();
+    next(error);
+  });
+  res.on("close", () => {
+    console.log("Response closed by the client, destroying socket");
+    socket.destroy();
+    console.log("socket has bet destroyed ");
+  });
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  router
+  getFileStream
 });
-//# sourceMappingURL=mainRouter.js.map
+//# sourceMappingURL=getFileStream.js.map
